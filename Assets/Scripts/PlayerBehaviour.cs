@@ -5,6 +5,8 @@ using UnityEngine;
 
 public class PlayerBehaviour : MonoBehaviour
 {
+    public static PlayerBehaviour singleton { get; private set; }
+
     public Rigidbody2D rb;
 
     public float horizontalForce;
@@ -12,7 +14,7 @@ public class PlayerBehaviour : MonoBehaviour
 
     void Start()
     {
-        
+        singleton = this;
     }
 
     void Update()
