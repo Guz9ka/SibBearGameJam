@@ -14,7 +14,6 @@ public class PlayerHandWiring : PlayerHand
 
     protected override void FixedUpdate()
     {
-        ClampHandPosition();
         GetInput();
         MoveHand();
         CheckWiresInteractionState();

@@ -34,7 +34,7 @@ public class _MinigamesState : MonoBehaviour
     public List<GameObject> toDeactivateLusterActive;
 
     [Header("Починка проводки")]
-    public WireInteractionState[] wireInteractionStates;
+    private WireInteractionState[] wireInteractionStates;
     public List<GameObject> toActivateWiringActive;
     public List<GameObject> toDeactivateWiringActive;
 
@@ -59,24 +59,34 @@ public class _MinigamesState : MonoBehaviour
         }
     }
 
-    IEnumerator TaskAutoClose(List<GameObject> toActivate, List<GameObject> toDeactivate)
+    IEnumerator CheckAllTasksComplete()
     {
         yield return new WaitForSeconds(taskAutoCloseDelay);
-        SwitchObjectStates(toDeactivate, toActivate);
 
-        CheckAllTasksComplete();
-    }
-
-    void CheckAllTasksComplete()
-    {
         if (taskStates[0] == true && taskStates[1] == true && taskStates[2] == true) //Проверить, все ли задачи выполнены
         {
             //GameEnd
         } 
     }
 
+    public void OpenMiniGame(CurrentMiniGame currentMiniGame)
+    {
+        switch (currentMiniGame)
+        {
+            case CurrentMiniGame.ElectricityStand:
+                ActivateElecticityStand();
+                break;
+            case CurrentMiniGame.LightBulb:
+                ActivateLuster();
+                break;
+            case CurrentMiniGame.Wiring:
+                ActivateWiring();
+                break;
+        }
+    }
+
     #region Электрощиток
-    public void ActivateElecticityShield()
+    public void ActivateElecticityStand()
     {
         if (standState == ElecricityStandState.Closed)
         {
@@ -84,18 +94,18 @@ public class _MinigamesState : MonoBehaviour
         }
         else if (standState == ElecricityStandState.Open)
         {
-            SwitchObjectStates(toActivateStandOpen, toDeactivateStandClosed);
+            SwitchObjectStates(toActivateStandOpen, toDeactivateStandOpen);
         }
         else if (standState == ElecricityStandState.TurnedOff)
         {
-            SwitchObjectStates(toActivateStandOpen, toDeactivateStandClosed);
+            SwitchObjectStates(toActivateStandOpen, toDeactivateStandOpen);
         }
     }
 
     public void OpenElectricityStand()
     {
         standState = ElecricityStandState.Open;
-        SwitchObjectStates(toActivateStandOpen, toDeactivateStandClosed);
+        SwitchObjectStates(toActivateStandOpen, toDeactivateStandOpen);
     }
 
     public void switchSwitcher(bool turnedOn)
@@ -123,13 +133,18 @@ public class _MinigamesState : MonoBehaviour
     #endregion
 
     #region Починка люстры
+    void ActivateLuster()
+    {
+        SwitchObjectStates(toActivateLusterActive, toDeactivateLusterActive);
+    }
+
     public void OnBulbRepaired(int socketId, BulbsocketState socketState)
     {
         socketsStates[socketId] = socketState;
 
         if(socketsStates[0] == BulbsocketState.Repaired && socketsStates[1] == BulbsocketState.Repaired && socketsStates[2] == BulbsocketState.Repaired)
         {
-            StartCoroutine(TaskAutoClose(toActivateLusterActive, toDeactivateLusterActive));
+            StartCoroutine(CheckAllTasksComplete());
             taskStates[1] = true; //Вторая задача выполнена
         }
         else
@@ -140,13 +155,18 @@ public class _MinigamesState : MonoBehaviour
     #endregion
 
     #region Починка проводки
+    void ActivateWiring()
+    {
+        SwitchObjectStates(toActivateWiringActive, toDeactivateWiringActive);
+    }
+
     public void OnWireRepaired(int wireId)
     {
         wireInteractionStates[wireId] = WireInteractionState.PlugedIn;
 
         if(wireInteractionStates[0] == WireInteractionState.PlugedIn && wireInteractionStates[1] == WireInteractionState.PlugedIn && wireInteractionStates[2] == WireInteractionState.PlugedIn)
         {
-            StartCoroutine(TaskAutoClose(toActivateWiringActive, toDeactivateWiringActive));
+            StartCoroutine(CheckAllTasksComplete());
             taskStates[2] = true;
         }
         else

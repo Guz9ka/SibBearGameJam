@@ -30,20 +30,8 @@ public class PlayerHand : MonoBehaviour
 
     protected virtual void FixedUpdate()
     {
-        ClampHandPosition();
         GetInput();
         MoveHand();
-    }
-
-    protected void ClampHandPosition()
-    {
-        float clampedPositionX;
-        float clampedPositionY;
-
-        clampedPositionX = Mathf.Clamp(handRb.transform.localPosition.x, minPositionX, maxPositionX);
-        clampedPositionY = Mathf.Clamp(handRb.transform.localPosition.y, minPositionY, maxPositionY);
-
-        handRb.transform.localPosition = new Vector2(clampedPositionX, clampedPositionY);
     }
 
     //Можно добавить больше садизма, запретив двигать рукой пока она в движении
