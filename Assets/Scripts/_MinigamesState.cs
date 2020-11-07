@@ -46,6 +46,7 @@ public class _MinigamesState : MonoBehaviour
         wireInteractionStates = new WireInteractionState[3];
     }
 
+    #region Взаимодействие со сценой
     void SwitchObjectStates(List<GameObject> toActivate, List<GameObject> toDeactivate)
     {
         foreach (var obj in toActivate)
@@ -59,16 +60,6 @@ public class _MinigamesState : MonoBehaviour
         }
     }
 
-    IEnumerator CheckAllTasksComplete()
-    {
-        yield return new WaitForSeconds(taskAutoCloseDelay);
-
-        if (taskStates[0] == true && taskStates[1] == true && taskStates[2] == true) //Проверить, все ли задачи выполнены
-        {
-            //GameEnd
-        } 
-    }
-
     public void OpenMiniGame(CurrentMiniGame currentMiniGame)
     {
         switch (currentMiniGame)
@@ -76,7 +67,7 @@ public class _MinigamesState : MonoBehaviour
             case CurrentMiniGame.ElectricityStand:
                 ActivateElecticityStand();
                 break;
-            case CurrentMiniGame.LightBulb:
+            case CurrentMiniGame.Luster:
                 ActivateLuster();
                 break;
             case CurrentMiniGame.Wiring:
@@ -84,6 +75,7 @@ public class _MinigamesState : MonoBehaviour
                 break;
         }
     }
+    #endregion
 
     #region Электрощиток
     public void ActivateElecticityStand()
@@ -120,7 +112,7 @@ public class _MinigamesState : MonoBehaviour
                 break;
         }
 
-        if(switchesActive >= 5) 
+        if(switchesActive >= 3) 
         {
             standState = ElecricityStandState.TurnedOff;
             taskStates[0] = true;
@@ -175,4 +167,14 @@ public class _MinigamesState : MonoBehaviour
         }
     }
     #endregion
+
+    IEnumerator CheckAllTasksComplete()
+    {
+        yield return new WaitForSeconds(taskAutoCloseDelay);
+
+        if (taskStates[0] == true && taskStates[1] == true && taskStates[2] == true) //Проверить, все ли задачи выполнены
+        {
+            //GameEnd
+        }
+    }
 }

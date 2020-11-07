@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -12,8 +13,13 @@ public class PowerSwitch : MonoBehaviour
 
         if (collider.CompareTag("Wrist") && _MinigamesState.singleton.standState == ElecricityStandState.Open)
         {
-            isTurnedOff = !isTurnedOff;
-            _MinigamesState.singleton.switchSwitcher(isTurnedOff);
+            SwitchSwitch();
         }
+    }
+
+    public void SwitchSwitch()
+    {
+        isTurnedOff = !isTurnedOff;
+        _MinigamesState.singleton.switchSwitcher(isTurnedOff);
     }
 }

@@ -3,30 +3,43 @@
 public enum CurrentMiniGame
 {
     ElectricityStand,
-    LightBulb,
+    Luster,
     Wiring
 }
 
-public class CameraMovement : MonoBehaviour
+public enum PlayerState
 {
+    Dead,
+    Alive
+}
+
+public class PlayerMovement : MonoBehaviour
+{
+    public static PlayerMovement singleton { get; private set; }
+
+    public PlayerState playerState;
     public CurrentMiniGame currentMiniGame;
     public new GameObject camera;
     public float moveDistance;
 
     private void Start()
     {
+        singleton = this;
         _MinigamesState.singleton.OpenMiniGame(currentMiniGame);
     }
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.RightArrow) && currentMiniGame != CurrentMiniGame.ElectricityStand)
+        if (playerState == PlayerState.Alive)
         {
-            TryMoveRight();
-        }
-        if (Input.GetKeyDown(KeyCode.LeftArrow) && currentMiniGame != CurrentMiniGame.Wiring)
-        {
-            TryMoveLeft();
+            if (Input.GetKeyDown(KeyCode.RightArrow) && currentMiniGame != CurrentMiniGame.ElectricityStand)
+            {
+                TryMoveRight();
+            }
+            else if (Input.GetKeyDown(KeyCode.LeftArrow) && currentMiniGame != CurrentMiniGame.Wiring)
+            {
+                TryMoveLeft();
+            }
         }
     }
 
@@ -37,7 +50,7 @@ public class CameraMovement : MonoBehaviour
 
         if (currentMiniGame == CurrentMiniGame.Wiring)
         {
-            currentMiniGame = CurrentMiniGame.LightBulb;
+            currentMiniGame = CurrentMiniGame.Luster;
         }
         else
         {
@@ -53,7 +66,7 @@ public class CameraMovement : MonoBehaviour
 
         if (currentMiniGame == CurrentMiniGame.ElectricityStand)
         {
-            currentMiniGame = CurrentMiniGame.LightBulb;
+            currentMiniGame = CurrentMiniGame.Luster;
         }
         else
         {

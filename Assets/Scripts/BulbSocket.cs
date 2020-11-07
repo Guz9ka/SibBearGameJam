@@ -50,7 +50,7 @@ public class BulbSocket : MonoBehaviour
         _MinigamesState.singleton.OnBulbRepaired(socketId, socketState);
     }
 
-    private void BreakBulb()
+    public void BreakBulb()
     {
         //звук рыгания
         socketState = BulbsocketState.Broken;

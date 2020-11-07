@@ -60,8 +60,7 @@ public class WireInteraction : MonoBehaviour
         {
             InteractionState = WireInteractionState.Static;
             lineRenderer.SetPosition(0, startPoint.position);
-            lineRenderer.SetPosition(1, new Vector2(startPoint.position.x + 1, startPoint.position.y));
+            lineRenderer.SetPosition(1, new Vector3(startPoint.position.x + 1, startPoint.position.y, 10));
         }
     }
-
 }
