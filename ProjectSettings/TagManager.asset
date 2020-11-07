@@ -7,6 +7,12 @@ TagManager:
   - Key
   - KeyHole
   - Wrist
+  - EndPointRed
+  - EndPointGreen
+  - EndPointBlue
+  - StartPointRed
+  - StartPointGreen
+  - StartPointBlue
   layers:
   - Default
   - TransparentFX
@@ -17,8 +23,8 @@ TagManager:
   - 
   - 
   - MiniGame
-  - 
-  - 
+  - StartPoint
+  - EndPoint
   - 
   - 
   - 

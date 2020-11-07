@@ -12,6 +12,8 @@ public class _MinigamesState : MonoBehaviour
 {
     public static _MinigamesState singleton { get; private set; }
 
+    public bool[] taskStates;
+
     [Header("Электрощиток закрытый")]
     public ElecricityStandState standState = ElecricityStandState.Closed;
 
@@ -24,9 +26,16 @@ public class _MinigamesState : MonoBehaviour
     public List<GameObject> toActivateStandOpen;
     public List<GameObject> toDeactivateStandOpen;
 
+    [Header("Люстра")]
+    private BulbsocketState[] socketsStates;
+    public List<GameObject> toActivateLusterActive;
+    public List<GameObject> toDeactivateLusterActive;
+
     private void Start()
     {
         singleton = this;
+        socketsStates = new BulbsocketState[3];
+        taskStates = new bool[3];
     }
 
     void SwitchObjectStates(List<GameObject> toActivate, List<GameObject> toDeactivate)
@@ -40,6 +49,19 @@ public class _MinigamesState : MonoBehaviour
         {
             obj.SetActive(false);
         }
+    }
+
+    void TaskAutoClose()
+    {
+
+    }
+
+    void CheckAllTasksComplete()
+    {
+        if (taskStates[0] == true && taskStates[1] == true && taskStates[2] == true) //Проверить, все ли задачи выполнены
+        {
+            //GameEnd
+        } 
     }
 
     #region Электрощиток
@@ -76,7 +98,24 @@ public class _MinigamesState : MonoBehaviour
                 switchesActive -= 1;
                 break;
         }
+
+        if(switchesActive >= 5) 
+        {
+            standState = ElecricityStandState.TurnedOff;
+        }
     }
     #endregion
 
+    #region Починка люстры
+    public void OnBulbRepaired(int socketId, BulbsocketState socketState)
+    {
+        socketsStates[socketId] = socketState;
+
+        if(socketsStates[0] == BulbsocketState.Repaired && socketsStates[1] == BulbsocketState.Repaired && socketsStates[2] == BulbsocketState.Repaired)
+        {
+            taskStates[1] = true; //Вторая задача выполнена
+            CheckAllTasksComplete();
+        }
+    }
+    #endregion
 }

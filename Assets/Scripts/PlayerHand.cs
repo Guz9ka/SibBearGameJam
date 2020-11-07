@@ -49,16 +49,9 @@ public class PlayerHand : MonoBehaviour
     //Можно добавить больше садизма, запретив двигать рукой пока она в движении
     private void GetInput()
     {
-        mouseY = Input.GetAxis("Mouse Y"); //Mathf.Lerp(mouseY, Input.GetAxis("Mouse Y"), interpolateSpeedVertical * Time.deltaTime);
+        mouseY = Input.GetAxis("Mouse Y");
 
-        mouseX = Mathf.Lerp(mouseX, Input.GetAxis("Mouse X"), interpolateSpeedHorizontal * Time.deltaTime); //Input.GetAxis("Mouse X");
-        //if (Input.GetAxis("Mouse X") < 0.1f && Input.GetAxis("Mouse X") > 0.1f)
-        //{
-        //}
-        //else
-        //{
-        //    mouseX = Input.GetAxis("Mouse X");
-        //}
+        mouseX = Mathf.Lerp(mouseX, Input.GetAxis("Mouse X"), interpolateSpeedHorizontal * Time.deltaTime);
     }
 
     private void MoveHand()
