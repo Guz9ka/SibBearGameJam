@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 public enum ElecricityStandState
@@ -13,6 +14,7 @@ public class _MinigamesState : MonoBehaviour
     public static _MinigamesState singleton { get; private set; }
 
     public bool[] taskStates;
+    public float taskAutoCloseDelay;
 
     [Header("Электрощиток закрытый")]
     public ElecricityStandState standState = ElecricityStandState.Closed;
@@ -31,11 +33,17 @@ public class _MinigamesState : MonoBehaviour
     public List<GameObject> toActivateLusterActive;
     public List<GameObject> toDeactivateLusterActive;
 
+    [Header("Починка проводки")]
+    public WireInteractionState[] wireInteractionStates;
+    public List<GameObject> toActivateWiringActive;
+    public List<GameObject> toDeactivateWiringActive;
+
     private void Start()
     {
         singleton = this;
-        socketsStates = new BulbsocketState[3];
         taskStates = new bool[3];
+        socketsStates = new BulbsocketState[3];
+        wireInteractionStates = new WireInteractionState[3];
     }
 
     void SwitchObjectStates(List<GameObject> toActivate, List<GameObject> toDeactivate)
@@ -51,9 +59,12 @@ public class _MinigamesState : MonoBehaviour
         }
     }
 
-    void TaskAutoClose()
+    IEnumerator TaskAutoClose(List<GameObject> toActivate, List<GameObject> toDeactivate)
     {
+        yield return new WaitForSeconds(taskAutoCloseDelay);
+        SwitchObjectStates(toDeactivate, toActivate);
 
+        CheckAllTasksComplete();
     }
 
     void CheckAllTasksComplete()
@@ -102,6 +113,11 @@ public class _MinigamesState : MonoBehaviour
         if(switchesActive >= 5) 
         {
             standState = ElecricityStandState.TurnedOff;
+            taskStates[0] = true;
+        }
+        else
+        {
+            standState = ElecricityStandState.Open;
         }
     }
     #endregion
@@ -113,8 +129,29 @@ public class _MinigamesState : MonoBehaviour
 
         if(socketsStates[0] == BulbsocketState.Repaired && socketsStates[1] == BulbsocketState.Repaired && socketsStates[2] == BulbsocketState.Repaired)
         {
+            StartCoroutine(TaskAutoClose(toActivateLusterActive, toDeactivateLusterActive));
             taskStates[1] = true; //Вторая задача выполнена
-            CheckAllTasksComplete();
+        }
+        else
+        {
+            StopAllCoroutines();
+        }
+    }
+    #endregion
+
+    #region Починка проводки
+    public void OnWireRepaired(int wireId)
+    {
+        wireInteractionStates[wireId] = WireInteractionState.PlugedIn;
+
+        if(wireInteractionStates[0] == WireInteractionState.PlugedIn && wireInteractionStates[1] == WireInteractionState.PlugedIn && wireInteractionStates[2] == WireInteractionState.PlugedIn)
+        {
+            StartCoroutine(TaskAutoClose(toActivateWiringActive, toDeactivateWiringActive));
+            taskStates[2] = true;
+        }
+        else
+        {
+            StopAllCoroutines();
         }
     }
     #endregion

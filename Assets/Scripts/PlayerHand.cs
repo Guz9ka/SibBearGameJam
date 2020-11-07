@@ -15,27 +15,27 @@ public class PlayerHand : MonoBehaviour
 
     public float sensitivityMultiplierX;
     public float sensitivityMultiplierY;
-    float mouseX;
-    float mouseY;
+    protected float mouseX;
+    protected float mouseY;
 
     public float minPositionX;
     public float maxPositionX;
     public float minPositionY;
     public float maxPositionY;
 
-    void Start()
+    protected void Start()
     {
         
     }
 
-    void FixedUpdate()
+    protected virtual void FixedUpdate()
     {
         ClampHandPosition();
         GetInput();
         MoveHand();
     }
 
-    private void ClampHandPosition()
+    protected void ClampHandPosition()
     {
         float clampedPositionX;
         float clampedPositionY;
@@ -47,14 +47,14 @@ public class PlayerHand : MonoBehaviour
     }
 
     //Можно добавить больше садизма, запретив двигать рукой пока она в движении
-    private void GetInput()
+    protected void GetInput()
     {
         mouseY = Input.GetAxis("Mouse Y");
 
         mouseX = Mathf.Lerp(mouseX, Input.GetAxis("Mouse X"), interpolateSpeedHorizontal * Time.deltaTime);
     }
 
-    private void MoveHand()
+    protected void MoveHand()
     {
         if (handRb.transform.localPosition.x > maxPositionX || handRb.transform.localPosition.x < minPositionX)
         {
@@ -65,7 +65,7 @@ public class PlayerHand : MonoBehaviour
         handRb.AddForce(force * Time.deltaTime);
     }
 
-    private void OnTriggerEnter2D(Collider2D collision)
+    protected virtual void OnTriggerEnter2D(Collider2D collision)
     {
         var collider = collision.GetComponent<Collider2D>();
 
