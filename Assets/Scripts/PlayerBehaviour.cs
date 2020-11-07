@@ -3,6 +3,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+public enum PlayerState
+{
+    Walk,
+    Minigame
+}
+
 public class PlayerBehaviour : MonoBehaviour
 {
     public static PlayerBehaviour singleton { get; private set; }
@@ -12,6 +18,9 @@ public class PlayerBehaviour : MonoBehaviour
     public float horizontalForce;
     float horizontalInput;
 
+    [Header("Поиск мини игр")]
+    public float checkRadius;
+
     void Start()
     {
         singleton = this;
@@ -19,6 +28,7 @@ public class PlayerBehaviour : MonoBehaviour
 
     void Update()
     {
+        StartMinigame();
         GetInput();
         Move();
     }
@@ -32,5 +42,12 @@ public class PlayerBehaviour : MonoBehaviour
     {
         Vector2 force = new Vector2(horizontalForce * horizontalInput, 0);
         rb.AddForce(force * Time.deltaTime);
+    }
+
+    void StartMinigame()
+    {
+        var collider = Physics2D.OverlapCircle(gameObject.transform.position, checkRadius, LayerMask.GetMask("MiniGame"));
+
+
     }
 }

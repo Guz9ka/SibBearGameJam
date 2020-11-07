@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ShakingHand : MonoBehaviour
+public class PlayerHand : MonoBehaviour
 {
     public Rigidbody2D handRb;
 
@@ -51,14 +51,14 @@ public class ShakingHand : MonoBehaviour
     {
         mouseY = Input.GetAxis("Mouse Y"); //Mathf.Lerp(mouseY, Input.GetAxis("Mouse Y"), interpolateSpeedVertical * Time.deltaTime);
 
-        if (Input.GetAxis("Mouse X") < 0.1f && Input.GetAxis("Mouse X") > 0.1f)
-        {
-            mouseX = Mathf.Lerp(mouseX, Input.GetAxis("Mouse X"), interpolateSpeedHorizontal * Time.deltaTime); //Input.GetAxis("Mouse X");
-        }
-        else
-        {
-            mouseX = Input.GetAxis("Mouse X");
-        }
+        mouseX = Mathf.Lerp(mouseX, Input.GetAxis("Mouse X"), interpolateSpeedHorizontal * Time.deltaTime); //Input.GetAxis("Mouse X");
+        //if (Input.GetAxis("Mouse X") < 0.1f && Input.GetAxis("Mouse X") > 0.1f)
+        //{
+        //}
+        //else
+        //{
+        //    mouseX = Input.GetAxis("Mouse X");
+        //}
     }
 
     private void MoveHand()
@@ -72,11 +72,13 @@ public class ShakingHand : MonoBehaviour
         handRb.AddForce(force * Time.deltaTime);
     }
 
-    private void OnCollisionEnter(Collision collision)
+    private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.collider.CompareTag("KeyHole"))
+        var collider = collision.GetComponent<Collider2D>();
+
+        if (collider.CompareTag("KeyHole"))
         {
-            
+            _MinigamesState.singleton.OpenElectricityStand();
         }
     }
 }
