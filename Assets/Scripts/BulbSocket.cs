@@ -12,9 +12,21 @@ public enum BulbsocketState
 
 public class BulbSocket : MonoBehaviour
 {
+    [Header("Параметры патрона лампочки")]
     public BulbsocketState socketState;
     public int socketId;
     public float secondsToScrew;
+
+    [Header("Визуальное изменение спрайта")]
+    public SpriteRenderer bulbSpriteRenderer;
+    public Sprite brokenSprite;
+    public Sprite emptySprite = null;
+    public Sprite repairedSprite;
+
+    private void Start()
+    {
+        ChangeBulbVisual();
+    }
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
@@ -42,6 +54,7 @@ public class BulbSocket : MonoBehaviour
         SoundsPlayer.singleton.PlaySoundBulbScrewIn();
         yield return new WaitForSeconds(secondsToScrew);
         socketState = BulbsocketState.Empty;
+        ChangeBulbVisual();
     }
 
     private IEnumerator ScrewInBulb()
@@ -49,6 +62,7 @@ public class BulbSocket : MonoBehaviour
         SoundsPlayer.singleton.PlaySoundBulbScrewIn();
         yield return new WaitForSeconds(secondsToScrew);
         socketState = BulbsocketState.Repaired;
+        ChangeBulbVisual();
         _MinigamesState.singleton.OnBulbRepaired(socketId, socketState);
     }
 
@@ -57,6 +71,23 @@ public class BulbSocket : MonoBehaviour
         SoundsPlayer.singleton.PlaySoundBurp();
         SoundsPlayer.singleton.PlaySoundBreakBulb();
         socketState = BulbsocketState.Broken;
+        ChangeBulbVisual();
+    }
+
+    void ChangeBulbVisual()
+    {
+        switch (socketState)
+        {
+            case BulbsocketState.Broken:
+                bulbSpriteRenderer.sprite = brokenSprite;
+                break;
+            case BulbsocketState.Empty:
+                bulbSpriteRenderer.sprite = emptySprite;
+                break;
+            case BulbsocketState.Repaired:
+                bulbSpriteRenderer.sprite = repairedSprite;
+                break;
+        }
     }
 
     private void OnTriggerExit2D(Collider2D collision)

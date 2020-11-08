@@ -7,6 +7,10 @@ public class PowerSwitch : MonoBehaviour
 {
     public bool isTurnedOff;
 
+    public SpriteRenderer switchSpriteRenderer;
+    public Sprite switchOnSprite;
+    public Sprite switchOffSprite;
+
     private void OnTriggerEnter2D(Collider2D collision)
     {
         var collider = collision.GetComponent<Collider2D>();
@@ -23,7 +27,21 @@ public class PowerSwitch : MonoBehaviour
         Debug.Log("switch");
         _MinigamesState.singleton.switchSwitcher(isTurnedOff);
 
+        ChangeVisual();
         if (isTurnedOff) { SoundsPlayer.singleton.PlaySoundSwitchOffSwitcher(); }
         else { SoundsPlayer.singleton.PlaySoundSwitchOnSwitcher(); }
+    }
+
+    void ChangeVisual()
+    {
+        switch (isTurnedOff)
+        {
+            case true:
+                switchSpriteRenderer.sprite = switchOffSprite;
+                break;
+            case false:
+                switchSpriteRenderer.sprite = switchOnSprite;
+                break;
+        }
     }
 }
