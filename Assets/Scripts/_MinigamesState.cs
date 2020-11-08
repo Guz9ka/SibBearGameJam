@@ -106,10 +106,10 @@ public class _MinigamesState : MonoBehaviour
         switch (turnedOn)
         {
             case true:
-                switchesActive += 1;
+                switchesActive -= 1;
                 break;
             case false:
-                switchesActive -= 1;
+                switchesActive += 1;
                 break;
         }
 
@@ -194,7 +194,7 @@ public class _MinigamesState : MonoBehaviour
 
         if (taskStates[0] == true && taskStates[1] == true && taskStates[2] == true) //Проверить, все ли задачи выполнены
         {
-            Debug.Log("Game end");
+            WinScene.singleton.OnGameEnd();
         }
     }
 }

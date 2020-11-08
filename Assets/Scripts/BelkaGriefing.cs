@@ -61,15 +61,29 @@ public class BelkaGriefing : MonoBehaviour
         belkaElectricityStand.SetActive(true);
         int griefTargetId = Random.Range(0, powerSwitches.Count - 1);
 
-        powerSwitches[griefTargetId].SwitchSwitch();
+        if(powerSwitches[griefTargetId].isTurnedOff == false)
+        {
+            powerSwitches[griefTargetId].SwitchSwitch();
+        }
+        else
+        {
+            ChooseObjectToGrief();
+        }
     }
 
     void BreakBulb()
     {
-        belkaLuster.SetActive(true);
         int griefTargetId = Random.Range(0, bulbSockets.Count - 1);
 
-        bulbSockets[griefTargetId].BreakBulb();
+        if(bulbSockets[griefTargetId].socketState == BulbsocketState.Repaired)
+        {
+            belkaLuster.SetActive(true);
+            bulbSockets[griefTargetId].BreakBulb();
+        }
+        else
+        {
+            ChooseObjectToGrief();
+        }
     }
 
     void UnPlugWire()
