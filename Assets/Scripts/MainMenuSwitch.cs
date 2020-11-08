@@ -20,6 +20,8 @@ public class MainMenuSwitch : MonoBehaviour
         belkaGriefing.griefAvailable = true;
         mainMenuScreen.SetActive(false);
         electricityStand.SetActive(true);
+        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
     }
 
     public void QuitGame()
