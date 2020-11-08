@@ -96,6 +96,7 @@ public class _MinigamesState : MonoBehaviour
 
     public void OpenElectricityStand()
     {
+        SoundsPlayer.singleton.PlaySoundOpenElectricityStand();
         standState = ElecricityStandState.Open;
         SwitchObjectStates(toActivateStandOpen, toDeactivateStandOpen);
     }
@@ -112,10 +113,16 @@ public class _MinigamesState : MonoBehaviour
                 break;
         }
 
-        if(switchesActive >= 3) 
+        CheckElectricityStandRepaired();
+    }
+
+    public void CheckElectricityStandRepaired()
+    {
+        if (switchesActive >= 3)
         {
             standState = ElecricityStandState.TurnedOff;
             taskStates[0] = true;
+            StartCoroutine(CheckAllTasksComplete());
         }
         else
         {
@@ -133,11 +140,15 @@ public class _MinigamesState : MonoBehaviour
     public void OnBulbRepaired(int socketId, BulbsocketState socketState)
     {
         socketsStates[socketId] = socketState;
+        CheckLusterRepaired();
+    }
 
-        if(socketsStates[0] == BulbsocketState.Repaired && socketsStates[1] == BulbsocketState.Repaired && socketsStates[2] == BulbsocketState.Repaired)
+    void CheckLusterRepaired()
+    {
+        if (socketsStates[0] == BulbsocketState.Repaired && socketsStates[1] == BulbsocketState.Repaired && socketsStates[2] == BulbsocketState.Repaired)
         {
-            StartCoroutine(CheckAllTasksComplete());
             taskStates[1] = true; //Вторая задача выполнена
+            StartCoroutine(CheckAllTasksComplete());
         }
         else
         {
@@ -156,10 +167,15 @@ public class _MinigamesState : MonoBehaviour
     {
         wireInteractionStates[wireId] = WireInteractionState.PlugedIn;
 
-        if(wireInteractionStates[0] == WireInteractionState.PlugedIn && wireInteractionStates[1] == WireInteractionState.PlugedIn && wireInteractionStates[2] == WireInteractionState.PlugedIn)
+        CheckWireRepaired();
+    }
+
+    public void CheckWireRepaired()
+    {
+        if (wireInteractionStates[0] == WireInteractionState.PlugedIn && wireInteractionStates[1] == WireInteractionState.PlugedIn && wireInteractionStates[2] == WireInteractionState.PlugedIn)
         {
-            StartCoroutine(CheckAllTasksComplete());
             taskStates[2] = true;
+            StartCoroutine(CheckAllTasksComplete());
         }
         else
         {
@@ -172,9 +188,13 @@ public class _MinigamesState : MonoBehaviour
     {
         yield return new WaitForSeconds(taskAutoCloseDelay);
 
+        CheckElectricityStandRepaired();
+        CheckLusterRepaired();
+        CheckWireRepaired();
+
         if (taskStates[0] == true && taskStates[1] == true && taskStates[2] == true) //Проверить, все ли задачи выполнены
         {
-            //GameEnd
+            Debug.Log("Game end");
         }
     }
 }

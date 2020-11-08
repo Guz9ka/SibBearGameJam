@@ -35,6 +35,7 @@ public class WireInteraction : MonoBehaviour
 
         if (collider.CompareTag("Wrist"))
         {
+            SoundsPlayer.singleton.PlaySoundPlugInWire();
             InteractionState = WireInteractionState.InHand;
         }
     }
@@ -49,6 +50,7 @@ public class WireInteraction : MonoBehaviour
 
     public void SetWireEndPosition(Vector3 endPosition)
     {
+        SoundsPlayer.singleton.PlaySoundPlugInWire();
         InteractionState = WireInteractionState.PlugedIn;
         lineRenderer.SetPosition(1, endPosition);
         _MinigamesState.singleton.OnWireRepaired(wireId);
@@ -58,6 +60,7 @@ public class WireInteraction : MonoBehaviour
     {
         if (InteractionState != WireInteractionState.PlugedIn)
         {
+            SoundsPlayer.singleton.PlaySoundPlugInWire();
             InteractionState = WireInteractionState.Static;
             lineRenderer.SetPosition(0, startPoint.position);
             lineRenderer.SetPosition(1, new Vector3(startPoint.position.x + 1, startPoint.position.y, 10));

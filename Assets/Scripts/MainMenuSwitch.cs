@@ -21,4 +21,9 @@ public class MainMenuSwitch : MonoBehaviour
         mainMenuScreen.SetActive(false);
         electricityStand.SetActive(true);
     }
+
+    public void QuitGame()
+    {
+        Application.Quit();
+    }
 }

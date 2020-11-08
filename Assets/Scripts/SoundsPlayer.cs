@@ -6,7 +6,8 @@ public class SoundsPlayer : MonoBehaviour
 {
     public static SoundsPlayer singleton { get; private set; }
 
-    public AudioSource switcherSound;
+    public AudioSource switcherOnSound;
+    public AudioSource switcherOffSound;
     public AudioSource openElectricityStandSound;
     public AudioSource burpSound;
     public AudioSource breakBulbSound;
@@ -18,9 +19,15 @@ public class SoundsPlayer : MonoBehaviour
         singleton = this;
     }
 
-    public void PlaySoundSwitchSwitcher() 
+    public void PlaySoundSwitchOnSwitcher() 
     {
-        switcherSound.Play();
+        switcherOnSound.Play();
+        Debug.Log("switch on");
+    }
+    public void PlaySoundSwitchOffSwitcher()
+    {
+        switcherOffSound.Play();
+        Debug.Log("switch off");
     }
 
     public void PlaySoundOpenElectricityStand()
@@ -41,6 +48,11 @@ public class SoundsPlayer : MonoBehaviour
     public void PlaySoundBulbScrewIn()
     {
         screwInBulbSound.Play();
+    }
+
+    public void StopSoundBulbScrewIn()
+    {
+        screwInBulbSound.Stop();
     }
 
     public void PlaySoundPlugInWire()

@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Collections;
+using UnityEngine;
 
 public enum CurrentMiniGame
 {
@@ -22,6 +23,9 @@ public class PlayerMovement : MonoBehaviour
     public new GameObject camera;
     public float moveDistance;
 
+    public float timeBetweenBurp;
+    private bool burpAvailable = true;
+
     private void Start()
     {
         singleton = this;
@@ -30,6 +34,11 @@ public class PlayerMovement : MonoBehaviour
 
     private void Update()
     {
+        if (burpAvailable)
+        {
+            StartCoroutine(Burp());
+        }
+
         if (playerState == PlayerState.Alive)
         {
             if (Input.GetKeyDown(KeyCode.RightArrow) && currentMiniGame != CurrentMiniGame.ElectricityStand)
@@ -43,6 +52,15 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
+    IEnumerator Burp()
+    {
+        burpAvailable = false;
+
+        yield return new WaitForSeconds(timeBetweenBurp);
+
+        SoundsPlayer.singleton.PlaySoundBurp();
+        burpAvailable = true;
+    }
 
     private void TryMoveRight()
     {

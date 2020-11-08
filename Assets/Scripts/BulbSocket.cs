@@ -39,12 +39,14 @@ public class BulbSocket : MonoBehaviour
 
     private IEnumerator UnscrewBulb()
     {
+        SoundsPlayer.singleton.PlaySoundBulbScrewIn();
         yield return new WaitForSeconds(secondsToScrew);
         socketState = BulbsocketState.Empty;
     }
 
     private IEnumerator ScrewInBulb()
     {
+        SoundsPlayer.singleton.PlaySoundBulbScrewIn();
         yield return new WaitForSeconds(secondsToScrew);
         socketState = BulbsocketState.Repaired;
         _MinigamesState.singleton.OnBulbRepaired(socketId, socketState);
@@ -52,7 +54,8 @@ public class BulbSocket : MonoBehaviour
 
     public void BreakBulb()
     {
-        //звук рыгания
+        SoundsPlayer.singleton.PlaySoundBurp();
+        SoundsPlayer.singleton.PlaySoundBreakBulb();
         socketState = BulbsocketState.Broken;
     }
 
@@ -63,7 +66,7 @@ public class BulbSocket : MonoBehaviour
         if (collider.CompareTag("Wrist"))
         {
             StopAllCoroutines();
-            //прекратить проигрывать звук
+            SoundsPlayer.singleton.StopSoundBulbScrewIn();
         }
     }
 }

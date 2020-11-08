@@ -11,7 +11,7 @@ public class PowerSwitch : MonoBehaviour
     {
         var collider = collision.GetComponent<Collider2D>();
 
-        if (collider.CompareTag("Wrist") && _MinigamesState.singleton.standState == ElecricityStandState.Open)
+        if (collider.CompareTag("Wrist") && _MinigamesState.singleton.standState != ElecricityStandState.Closed )
         {
             SwitchSwitch();
         }
@@ -20,6 +20,10 @@ public class PowerSwitch : MonoBehaviour
     public void SwitchSwitch()
     {
         isTurnedOff = !isTurnedOff;
+        Debug.Log("switch");
         _MinigamesState.singleton.switchSwitcher(isTurnedOff);
+
+        if (isTurnedOff) { SoundsPlayer.singleton.PlaySoundSwitchOffSwitcher(); }
+        else { SoundsPlayer.singleton.PlaySoundSwitchOnSwitcher(); }
     }
 }
