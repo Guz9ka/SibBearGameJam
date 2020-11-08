@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
 
 public class MainMenuSwitch : MonoBehaviour
@@ -7,6 +8,12 @@ public class MainMenuSwitch : MonoBehaviour
     public BelkaGriefing belkaGriefing;
     public GameObject mainMenuScreen;
     public GameObject electricityStand;
+
+    private void Awake()
+    {
+        PlayerSettings.stripEngineCode = false;
+        PlayerSettings.SetManagedStrippingLevel(BuildTargetGroup.WebGL, ManagedStrippingLevel.Low);
+    }
 
     private void Start()
     {

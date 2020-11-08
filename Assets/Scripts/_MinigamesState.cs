@@ -118,14 +118,15 @@ public class _MinigamesState : MonoBehaviour
 
     public void CheckElectricityStandRepaired()
     {
-        if (switchesActive >= 3)
+        if (switchesActive >= 5)
         {
             standState = ElecricityStandState.TurnedOff;
             taskStates[0] = true;
-            StartCoroutine(CheckAllTasksComplete());
+            CheckAllTasksComplete();
         }
         else
         {
+            taskStates[0] = false;
             standState = ElecricityStandState.Open;
         }
     }
@@ -143,16 +144,16 @@ public class _MinigamesState : MonoBehaviour
         CheckLusterRepaired();
     }
 
-    void CheckLusterRepaired()
+    public void CheckLusterRepaired()
     {
         if (socketsStates[0] == BulbsocketState.Repaired && socketsStates[1] == BulbsocketState.Repaired && socketsStates[2] == BulbsocketState.Repaired)
         {
             taskStates[1] = true; //Вторая задача выполнена
-            StartCoroutine(CheckAllTasksComplete());
+            CheckAllTasksComplete();
         }
         else
         {
-            StopAllCoroutines();
+            taskStates[1] = false;
         }
     }
     #endregion
@@ -175,23 +176,17 @@ public class _MinigamesState : MonoBehaviour
         if (wireInteractionStates[0] == WireInteractionState.PlugedIn && wireInteractionStates[1] == WireInteractionState.PlugedIn && wireInteractionStates[2] == WireInteractionState.PlugedIn)
         {
             taskStates[2] = true;
-            StartCoroutine(CheckAllTasksComplete());
+            CheckAllTasksComplete();
         }
         else
         {
-            StopAllCoroutines();
+            taskStates[2] = false;
         }
     }
     #endregion
 
-    IEnumerator CheckAllTasksComplete()
+    void CheckAllTasksComplete()
     {
-        yield return new WaitForSeconds(taskAutoCloseDelay);
-
-        CheckElectricityStandRepaired();
-        CheckLusterRepaired();
-        CheckWireRepaired();
-
         if (taskStates[0] == true && taskStates[1] == true && taskStates[2] == true) //Проверить, все ли задачи выполнены
         {
             WinScene.singleton.OnGameEnd();
