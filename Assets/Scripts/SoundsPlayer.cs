@@ -6,17 +6,17 @@ public class SoundsPlayer : MonoBehaviour
 {
     public static SoundsPlayer singleton { get; private set; }
 
-    private void Start()
-    {
-        singleton = this;
-    }
-
     public AudioSource switcherSound;
     public AudioSource openElectricityStandSound;
     public AudioSource burpSound;
     public AudioSource breakBulbSound;
     public AudioSource plugInWireSound;
     public AudioSource screwInBulbSound;
+
+    private void Start()
+    {
+        singleton = this;
+    }
 
     public void PlaySoundSwitchSwitcher() 
     {

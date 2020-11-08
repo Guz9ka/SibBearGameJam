@@ -74,12 +74,19 @@ public class BelkaGriefing : MonoBehaviour
 
     void UnPlugWire()
     {
-        belkaWiring.SetActive(true);
-        int griefTargetId = Random.Range(0, wires.Count - 1);
+        if(_MinigamesState.singleton.standState != ElecricityStandState.Closed)
+        {
+            belkaWiring.SetActive(true);
+            int griefTargetId = Random.Range(0, wires.Count - 1);
 
-        wires[griefTargetId].InteractionState = WireInteractionState.Static;
-        wires[griefTargetId].lineRenderer.SetPosition(0, wires[griefTargetId].startPoint.position);
-        wires[griefTargetId].lineRenderer.SetPosition(1, new Vector3(wires[griefTargetId].startPoint.position.x + 1, wires[griefTargetId].startPoint.position.y, 10));
+            wires[griefTargetId].InteractionState = WireInteractionState.Static;
+            wires[griefTargetId].lineRenderer.SetPosition(0, wires[griefTargetId].startPoint.position);
+            wires[griefTargetId].lineRenderer.SetPosition(1, new Vector3(wires[griefTargetId].startPoint.position.x + 1, wires[griefTargetId].startPoint.position.y, 10));
+        }
+        else
+        {
+            ChooseObjectToGrief();
+        }
     }
 
     void CheckSpottedState()
