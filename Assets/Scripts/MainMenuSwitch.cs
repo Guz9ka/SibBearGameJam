@@ -11,8 +11,8 @@ public class MainMenuSwitch : MonoBehaviour
 
     private void Awake()
     {
-        PlayerSettings.stripEngineCode = false;
-        PlayerSettings.SetManagedStrippingLevel(BuildTargetGroup.WebGL, ManagedStrippingLevel.Low);
+        //PlayerSettings.stripEngineCode = false;
+        //PlayerSettings.SetManagedStrippingLevel(BuildTargetGroup.WebGL, ManagedStrippingLevel.Low);
     }
 
     private void Start()
